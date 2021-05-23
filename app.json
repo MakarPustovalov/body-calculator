@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "todo-native",
-    "slug": "todo-native",
+    "name": "body-calculator",
+    "slug": "body-calculator",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
