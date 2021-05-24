@@ -12,7 +12,7 @@ export default function App() {
 
   const calcBMI = (data) => {
     let {height, weight} = data
-    if (weight <= 0 || height <= 0) return alert('Введите все параметры')
+    if ((height && weight) == 0) return alert('Введите все параметры')
 
     let result = weight / Math.pow((height / 100), 2)
     result = result.toFixed(2)
@@ -20,9 +20,9 @@ export default function App() {
     return result
   }
 
-  const calcBFPMale = (data) => {
+  const calcBFP = (data) => {
     let {height, neck, waist} = data
-    if (neck <= 0 || height <= 0 || waist <= 0) return alert('Введите все параметры')
+    if ((neck && waist && height) == 0) return alert('Введите все параметры')
 
     let result =	(495 / ((1.0324 - 0.19077 * Math.log10(waist - neck) ) + 0.15456 * Math.log10(height))) - 450
     result = result.toFixed(2)
@@ -30,11 +30,23 @@ export default function App() {
     return result
   }
 
+  const calcFFMI = (data) => {
+    let {height, weight, BFP} = data
+    if ((weight && height && BFP) == 0) return alert('Введите все параметры')
+
+    let leanWeight = (weight * (1 - BFP / 100))
+    let result = leanWeight / Math.pow((height / 100), 2)
+    result = result.toFixed(2)
+
+    return result
+  }
+
   const calcBodyParams = (data) => {
-    // if ((neck && waist && height && weight) == 0) return alert('Введите все параметры')
     const BMI = calcBMI(data)
-    const BFPMale = calcBFPMale(data)
-    setBodyParams({BMI, BFPMale})
+    const BFP = calcBFP(data)
+    data.BFP = BFP
+    const FFMI = calcFFMI(data)
+    setBodyParams({BMI, BFP, FFMI})
   }
 
   return (
@@ -72,7 +84,8 @@ export default function App() {
 
         <TouchableOpacity style={styles.button} onPress={() => calcBodyParams({weight, height, neck, waist})}><Text style={styles.buttonText}>Рассчитать</Text></TouchableOpacity>
         {bodyParams.BMI > 0 ? <Text style={styles.result}>Ваш BMI: {bodyParams.BMI}</Text> : false}
-        {bodyParams.BFPMale > 0 ? <Text style={styles.result}>Ваш ППЖ: {bodyParams.BFPMale}%</Text> : false}
+        {bodyParams.BFP > 0 ? <Text style={styles.result}>Ваш ППЖ: {bodyParams.BFP}%</Text> : false}
+        {bodyParams.FFMI > 0 ? <Text style={styles.result}>Ваш FFMI: {bodyParams.FFMI}</Text> : false}
         <StatusBar style="auto" />
       </View>
     </ScrollView>
